@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getSortedPostsData } from "@/src/lib/markdown";
+import { getSortedPostsData } from "@/src/lib/posts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faCode, faCompass, faBolt, faEnvelope, faCalendarDays, faTag } from "@fortawesome/free-solid-svg-icons";
 
@@ -8,9 +8,10 @@ export const metadata = {
   description: "專注於現代網頁技術、數位產品獨立開發與個人品牌自動化經營。與你一同在數位時代成長。",
 };
 
-export default function HomePage() {
+export default async function HomePage() {
   // 取得最新發布的文章，並只取前兩篇展示在首頁
-  const latestPosts = getSortedPostsData().slice(0, 2);
+  const posts = await getSortedPostsData();
+  const latestPosts = posts.slice(0, 2);
 
   const features = [
     {

@@ -3,7 +3,7 @@ export const site = {
     description: '',
     locale: 'zh-TW',
     author: 'Tails Azimuth',
-    url: `${process.env.NEXT_SITE_URL || 'http://localhost:3000'}`,
+    url: `${process.env.NEXT_SITE_URL || 'https://yourdomain.com'}`,
     logo: `${process.env.BASE_PATH || ''}/static/images/logo.png`,
     socialBanner: `${process.env.BASE_PATH || ''}/static/images/twitter-card.png`,
     email: 'address@yoursite.com',

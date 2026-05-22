@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
-import { getPageData } from "@/src/lib/markdown";
-import { marked } from "marked";
+import { getPageData } from "@/src/lib/page";
 import { faCalendarDays } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { generatePageSchema } from "@/src/lib/jsonld";
@@ -11,9 +10,8 @@ interface PageProps {
 }
 
 export async function generateMetadata({ params }: PageProps) {
-    const resolvedParams = await params;
-    const page = getPageData(resolvedParams.slug);
-    if (!page) return {};
+    const { slug } = await params;
+    const page = await getPageData(slug);
 
     return {
         title: page.title,
@@ -22,12 +20,12 @@ export async function generateMetadata({ params }: PageProps) {
 }
 
 export default async function PageLayoutPage({ params }: PageProps) {
-    const resolvedParams = await params;
+    const { slug } = await params;
 
-    const page = getPageData(resolvedParams.slug);
+    const page = await getPageData(slug);
     if (!page) notFound();
 
-    const htmlContent = await marked.parse(page.content);
+    const Content = page.content;
 
     return (
         <div className="max-w-6xl mx-auto px-4 py-12 md:py-20">
@@ -36,14 +34,15 @@ export default async function PageLayoutPage({ params }: PageProps) {
                     {page.title}
                 </h1>
                 <p className="text-sm text-foreground/50">
-                    <FontAwesomeIcon icon={faCalendarDays} /> {page.updatedAt}
+                    <FontAwesomeIcon icon={faCalendarDays} /> {new Date(page.updatedAt).toLocaleDateString()}
                 </p>
             </header>
 
             <main
                 className="prose dark:prose-invert prose-headings:text-foreground prose-strong:text-foreground prose-a:text-primary max-w-none text-base leading-relaxed text-foreground/80"
-                dangerouslySetInnerHTML={{ __html: htmlContent }}
-            />
+            >
+                <Content />
+            </main>
 
             <JsonLd schema={generatePageSchema(page)} />
         </div>

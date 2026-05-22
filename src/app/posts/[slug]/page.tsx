@@ -1,4 +1,4 @@
-import { getPostData, getSortedPostsData } from "@/src/lib/markdown";
+import { getAllPostSlugs, getPostData, generatePostSchema } from "@/src/lib/posts";
 import { notFound } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarDays, faTag } from "@fortawesome/free-solid-svg-icons";
@@ -6,45 +6,45 @@ import { faTwitter, faFacebook, faLinkedin } from "@fortawesome/free-brands-svg-
 import { site } from "@/src/lib/constants";
 import TableOfContents from "@/src/components/TableOfContents";
 import JsonLd from "@/src/components/JsonLd";
-import { generatePostSchema } from "@/src/lib/jsonld";
+import { Metadata } from "next";
 
 interface PageProps {
     params: Promise<{ slug: string }>;
 }
 
-export async function generateMetadata({ params }: PageProps) {
-    const { slug } = await params;
-    console.log("Generating metadata for post slug:", slug);
-    const mod = await import(`@/content/posts/${slug}.mdx`);
-    const post = mod.metadata;
+export async function generateStaticParams() {
+    return getAllPostSlugs().map(slug => ({ slug }));
+}
 
-    if (!post) return {};
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+    const { slug } = await params;
+    const post = await getPostData(slug);
 
     return {
         title: post.title,
         description: post.description,
+        keywords: post.tags,
+        openGraph: {
+            title: post.title,
+            description: post.description,
+            type: "article",
+            publishedTime: post.createdAt,
+            modifiedTime: post.updatedAt,
+            tags: post.tags,
+        },
+        alternates: {
+            canonical: `${site.url}/post/${slug}`,
+        },
     };
-    // const { metadata: post } = await import(`@/content/posts/${slug}.mdx`);
-    // console.log("Generating metadata for post:", post);
-    // if (!post) return {};
-    // return {
-    //     title: `${post.title}`,
-    //     description: post.description,
-    // };
-}
-
-export async function generateStaticParams() {
-    const posts = await getSortedPostsData();
-    return posts.map((post) => ({ slug: post.slug }));
 }
 
 export default async function BlogPostDetailPage({ params }: PageProps) {
     const { slug } = await params;
 
-    const { default: PostContent, metadata: post } = await import(`@/content/posts/${slug}.mdx`).catch(() => {
-        notFound();
-    });
+    const post = await getPostData(slug);
+    if (!post) notFound();
 
+    const Content = post.content;
     const siteUrl = `${site.url}/posts/${slug}`;
     const shareLinks = [
         { icon: <FontAwesomeIcon icon={faTwitter} />, href: `https://twitter.com/intent/tweet?url=${encodeURIComponent(siteUrl)}&text=${encodeURIComponent(post.title)}`, label: "Twitter", hoverColor: "hover:text-[#1DA1F2]" },
@@ -75,7 +75,7 @@ export default async function BlogPostDetailPage({ params }: PageProps) {
 
                     <main
                         className="prose dark:prose-invert prose-headings:scroll-mt-24 prose-headings:text-foreground prose-a:text-primary max-w-none text-base md:text-lg leading-relaxed text-foreground/90">
-                        <PostContent />
+                        <Content />
                     </main>
 
                     <footer className="mt-16 pt-8 border-t border-foreground/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">

@@ -1,4 +1,4 @@
-import { getSortedPostsData } from "@/src/lib/markdown";
+import { getSortedPostsData } from "@/src/lib/posts";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarDays, faTag, faArrowRight } from "@fortawesome/free-solid-svg-icons";
@@ -8,8 +8,8 @@ export const metadata = {
     description: "探索關於網頁技術、獨立開發與數位品牌自動化经营的實戰心得與技術觀點。",
 };
 
-export default function BlogListPage() {
-    const posts = getSortedPostsData();
+export default async function BlogListPage() {
+    const posts = await getSortedPostsData();
 
     return (
         <div className="max-w-5xl mx-auto px-4 py-16 md:py-24">

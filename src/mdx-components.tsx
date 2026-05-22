@@ -16,6 +16,6 @@ const components: MDXComponents = {
     ),
 } satisfies MDXComponents
 
-export function useMDXComponents(overrides: MDXComponents): MDXComponents {
-    return { ...components, ...overrides };
+export function useMDXComponents(): MDXComponents {
+    return components;
 }
