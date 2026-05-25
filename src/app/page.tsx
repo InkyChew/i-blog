@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getSortedPostsData } from "@/src/lib/posts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faCode, faCompass, faBolt, faEnvelope, faCalendarDays, faTag } from "@fortawesome/free-solid-svg-icons";
+import PostCard from "../components/PostCard";
 
 export const metadata = {
   title: "獨立開發與網頁技術隨筆",
@@ -101,33 +102,7 @@ export default async function HomePage() {
         {/* 文章卡片網格 */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {latestPosts.map((post) => (
-            <article
-              key={post.slug}
-              className="group relative flex flex-col justify-between p-6 md:p-8 rounded-2xl border border-foreground/10 bg-foreground/[0.01] hover:bg-foreground/[0.02] hover:border-primary/30 hover:shadow-xl hover:shadow-primary/[0.01] transition-all duration-300"
-            >
-              <div>
-                <div className="flex items-center gap-4 text-xs font-medium text-foreground/50 mb-4">
-                  <span className="flex items-center gap-1.5 text-secondary font-bold uppercase">
-                    <FontAwesomeIcon icon={faTag} className="text-[10px]" /> {post.category}
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <FontAwesomeIcon icon={faCalendarDays} /> {new Date(post.updatedAt).toLocaleDateString()}
-                  </span>
-                </div>
-                <h3 className="text-xl md:text-2xl font-bold tracking-tight mb-3 text-foreground group-hover:text-primary transition-colors duration-200">
-                  <Link href={`/posts/${post.slug}`}>
-                    <span className="absolute inset-0 z-10 rounded-2xl" />
-                    {post.title}
-                  </Link>
-                </h3>
-                <p className="text-sm sm:text-base text-foreground/70 mb-6 line-clamp-2 leading-relaxed">
-                  {post.description}
-                </p>
-              </div>
-              <div className="flex items-center gap-2 text-sm font-bold text-primary group-hover:gap-3 transition-all duration-200 mt-auto">
-                閱讀全文 <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
-              </div>
-            </article>
+            <PostCard key={post.slug} post={post} titleAs="h3" />
           ))}
         </div>
       </section>
