@@ -21,26 +21,30 @@ function TocList({ toc, activeId, onLinkClick }: TocListProps) {
         <ul className="flex flex-col gap-2.5 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
             {toc.map((item) => {
                 const isActive = activeId === item.id;
+
                 return (
                     <li
                         key={item.id}
-                        style={{ paddingLeft: item.level === 3 ? "12px" : "0px" }}
                         className="text-sm transition-all duration-200"
+                        style={{
+                            paddingLeft: item.level === 3 ? 12 : 0,
+                        }}
                     >
                         <a
                             href={`#${item.id}`}
                             onClick={(e) => onLinkClick(e, item.id)}
-                            style={{
-                                transform: isActive ? "translateX(4px)" : "translateX(0px)",
-                            }}
-                            className={`flex items-center gap-1.5 truncate py-0.5 transition-all duration-200 ${isActive
-                                ? "text-primary font-bold"
-                                : "text-foreground/50 hover:text-foreground/80"
-                                }`}
+                            className={`
+                flex items-center gap-1.5 truncate py-0.5 transition-all duration-200
+                ${isActive
+                                    ? "text-primary font-bold translate-x-1"
+                                    : "text-foreground/50 hover:text-foreground/80"
+                                }
+              `}
                         >
                             {item.level === 3 && (
                                 <span className="text-foreground/20 shrink-0">•</span>
                             )}
+
                             <span className="truncate">{item.text}</span>
                         </a>
                     </li>
@@ -51,95 +55,90 @@ function TocList({ toc, activeId, onLinkClick }: TocListProps) {
 }
 
 export default function TableOfContents() {
-    const [toc, setToc] = useState<TocItem[]>([]);
-    const [activeId, setActiveId] = useState<string>("");
+    const [activeId, setActiveId] = useState("");
     const [mobileOpen, setMobileOpen] = useState(false);
-    const observerRef = useRef<IntersectionObserver | null>(null);
+    const [toc, setToc] = useState<TocItem[]>([]);
+
+    const headingsRef = useRef<HTMLElement[]>([]);
 
     useEffect(() => {
-        const articleBody = document.querySelector("main");
-        if (!articleBody) return;
+        const article = document.querySelector("main");
+        if (!article) return;
 
-        const init = () => {
-            const headings = Array.from(articleBody.querySelectorAll("h2, h3"));
-            if (headings.length === 0) return;
+        const headings = Array.from(
+            article.querySelectorAll<HTMLElement>("h2, h3")
+        );
 
-            const idCount: Record<string, number> = {};
-            const tocItems: TocItem[] = [];
+        headingsRef.current = headings;
 
-            headings.forEach((heading) => {
-                const base = heading.id
-                    ? heading.id
-                    : (heading.textContent || "")
-                        .trim()
-                        .toLowerCase()
-                        .replace(/\s+/g, "-")
-                        .replace(/[^\w-]/g, "") || "heading";
+        const idMap: Record<string, number> = {};
 
-                const count = (idCount[base] = (idCount[base] ?? 0) + 1);
-                const finalId = count === 1 ? base : `${base}-${count}`;
+        const items = headings.map((heading) => {
+            const raw =
+                heading.id ||
+                heading.textContent
+                    ?.trim()
+                    .toLowerCase()
+                    .replace(/\s+/g, "-")
+                    .replace(/[^\w-]/g, "") ||
+                "heading";
 
-                heading.id = finalId;
+            idMap[raw] = (idMap[raw] || 0) + 1;
 
-                tocItems.push({
-                    id: finalId,
-                    text: heading.textContent || "",
-                    level: heading.tagName === "H2" ? 2 : 3,
-                });
-            });
+            const id =
+                idMap[raw] === 1
+                    ? raw
+                    : `${raw}-${idMap[raw]}`;
 
-            setToc(tocItems);
+            heading.id = id;
 
-            observerRef.current?.disconnect();
-
-            observerRef.current = new IntersectionObserver(
-                (entries) => {
-                    entries.forEach((entry) => {
-                        const el = entry.target as HTMLElement;
-                        el.dataset.visible = entry.isIntersecting ? "true" : "false";
-                    });
-
-                    const firstVisible = headings.find(
-                        (h) => (h as HTMLElement).dataset.visible === "true"
-                    );
-
-                    if (firstVisible) {
-                        setActiveId(firstVisible.id);
-                    }
-                },
-                {
-                    root: null,
-                    rootMargin: "-80px 0px -40% 0px",
-                    threshold: 0,
-                }
-            );
-
-            headings.forEach((h) => observerRef.current!.observe(h));
-        };
-
-        init();
-
-        const mutationObserver = new MutationObserver((mutations) => {
-            const hasStructuralChange = mutations.some(
-                (m) => m.type === "childList" && m.addedNodes.length > 0
-            );
-            if (!hasStructuralChange) return;
-
-            observerRef.current?.disconnect();
-            init();
+            return {
+                id,
+                text: heading.textContent || "",
+                level: heading.tagName === "H2" ? 2 : 3,
+            };
         });
 
-        mutationObserver.observe(articleBody, { childList: true, subtree: true });
+        setToc(items);
 
-        return () => {
-            observerRef.current?.disconnect();
-            mutationObserver.disconnect();
-        };
+        const observer = new IntersectionObserver(
+            (entries) => {
+                const visible = entries
+                    .filter((e) => e.isIntersecting)
+                    .sort(
+                        (a, b) =>
+                            a.boundingClientRect.top -
+                            b.boundingClientRect.top
+                    );
+
+                if (visible.length > 0) {
+                    setActiveId(
+                        (visible[0].target as HTMLElement).id
+                    );
+                }
+            },
+            {
+                rootMargin: "-96px 0px -60% 0px",
+                threshold: 0.1,
+            }
+        );
+
+        headings.forEach((h) => observer.observe(h));
+
+        return () => observer.disconnect();
     }, []);
 
-    const handleLinkClick = (e: React.MouseEvent, id: string) => {
+    const handleLinkClick = (
+        e: React.MouseEvent,
+        id: string
+    ) => {
         e.preventDefault();
-        document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+        document.getElementById(id)?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+        });
+
         setMobileOpen(false);
     };
 
@@ -147,15 +146,21 @@ export default function TableOfContents() {
 
     return (
         <>
-            {/* ── 桌面版 ── */}
-            <nav className="hidden lg:block w-full bg-foreground/[0.01] border border-foreground/10 rounded-2xl p-5 backdrop-blur-sm transition-all duration-300">
+            {/* Desktop */}
+            <nav className="hidden lg:block w-full bg-foreground/[0.01] border border-foreground/10 rounded-2xl p-5 backdrop-blur-sm">
                 <p className="text-xs font-bold uppercase tracking-widest text-foreground/40 flex items-center gap-2 mb-4">
-                    <FontAwesomeIcon icon={faListUl} className="text-[10px]" />導覽目錄
+                    <FontAwesomeIcon icon={faListUl} className="text-[10px]" />
+                    導覽目錄
                 </p>
-                <TocList toc={toc} activeId={activeId} onLinkClick={handleLinkClick} />
+
+                <TocList
+                    toc={toc}
+                    activeId={activeId}
+                    onLinkClick={handleLinkClick}
+                />
             </nav>
 
-            {/* ── 手機版 ── */}
+            {/* Mobile */}
             <div className="lg:hidden">
                 {mobileOpen && (
                     <div
@@ -164,28 +169,39 @@ export default function TableOfContents() {
                     />
                 )}
 
-                <div
-                    className={`fixed bottom-20 right-4 z-50 w-72 bg-background border border-foreground/10 rounded-2xl shadow-xl overflow-hidden transition-all duration-300 origin-bottom-right ${mobileOpen
-                        ? "opacity-100 scale-100 pointer-events-auto"
-                        : "opacity-0 scale-90 pointer-events-none"
-                        }`}
+                <aside
+                    className={`
+            fixed bottom-20 right-4 z-50 w-72
+            bg-background border border-foreground/10
+            rounded-2xl shadow-xl overflow-hidden
+            transition-all duration-300 origin-bottom-right
+            ${mobileOpen
+                            ? "opacity-100 scale-100"
+                            : "opacity-0 scale-95 pointer-events-none"
+                        }
+          `}
                 >
                     <div className="p-4">
                         <p className="text-xs font-bold uppercase tracking-widest text-foreground/40 flex items-center gap-2 mb-4">
-                            <FontAwesomeIcon icon={faListUl} className="text-[10px]" /> 導覽目錄
+                            <FontAwesomeIcon icon={faListUl} className="text-[10px]" />
+                            導覽目錄
                         </p>
-                        <TocList toc={toc} activeId={activeId} onLinkClick={handleLinkClick} />
+
+                        <TocList
+                            toc={toc}
+                            activeId={activeId}
+                            onLinkClick={handleLinkClick}
+                        />
                     </div>
-                </div>
+                </aside>
 
                 <button
-                    onClick={() => setMobileOpen((prev) => !prev)}
+                    onClick={() => setMobileOpen((p) => !p)}
                     aria-label={mobileOpen ? "關閉目錄" : "開啟目錄"}
-                    className="fixed bottom-6 right-4 z-50 w-12 h-12 rounded-full bg-primary text-primary-foreground shadow-lg flex items-center justify-center transition-all duration-300 active:scale-90"
+                    className="fixed bottom-6 right-4 z-50 w-12 h-12 rounded-full bg-primary text-primary-foreground shadow-lg flex items-center justify-center active:scale-90"
                 >
                     <FontAwesomeIcon
                         icon={mobileOpen ? faXmark : faListUl}
-                        className="text-base transition-transform duration-300"
                     />
                 </button>
             </div>
