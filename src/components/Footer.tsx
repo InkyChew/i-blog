@@ -1,16 +1,15 @@
 import Link from "next/link";
 import { site } from "../lib/constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRss } from "@fortawesome/free-solid-svg-icons";
-import { faGithub, faXTwitter, faLinkedin, faYoutube } from "@fortawesome/free-brands-svg-icons";
+import { faYoutube, faInstagram } from "@fortawesome/free-brands-svg-icons";
 
 export default function Footer() {
     const currentYear = new Date().getFullYear();
 
     const linksCompany = [
-        { name: "關於我", href: "/about" },
-        { name: "所有文章", href: "/posts" },
-        { name: "數位產品", href: "/#products" },
+        { name: "關於", href: "/about" },
+        { name: "文章", href: "/posts" },
+        { name: "聯絡", href: "/contact" },
     ];
 
     const linksLegal = [
@@ -19,9 +18,7 @@ export default function Footer() {
     ];
 
     const socialLinks = [
-        { icon: <FontAwesomeIcon icon={faGithub} />, href: "https://github.com", label: "GitHub" },
-        { icon: <FontAwesomeIcon icon={faXTwitter} />, href: "https://twitter.com", label: "Twitter" },
-        { icon: <FontAwesomeIcon icon={faLinkedin} />, href: "https://linkedin.com", label: "LinkedIn" },
+        { icon: <FontAwesomeIcon icon={faInstagram} />, href: "https://instagram.com", label: "Instagram" },
         { icon: <FontAwesomeIcon icon={faYoutube} />, href: "https://youtube.com", label: "YouTube" },
     ];
 
@@ -56,9 +53,6 @@ export default function Footer() {
                                     {social.icon}
                                 </a>
                             ))}
-                            <Link href="/rss.xml" className="hover:text-accent transition-colors" aria-label="RSS Feed">
-                                <FontAwesomeIcon icon={faRss} className="text-lg" />
-                            </Link>
                         </div>
                     </div>
 

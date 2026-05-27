@@ -80,7 +80,7 @@ export default function TableOfContents() {
                     ?.trim()
                     .toLowerCase()
                     .replace(/\s+/g, "-")
-                    .replace(/[^\w-]/g, "") ||
+                    .replace(/[^\p{L}\p{N}-]/gu, "") ||
                 "heading";
 
             idMap[raw] = (idMap[raw] || 0) + 1;

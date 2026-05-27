@@ -1,7 +1,4 @@
 import { getSortedPostsData } from "@/src/lib/posts";
-import Link from "next/link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendarDays, faTag, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import PostCard from "@/src/components/PostCard";
 
 export const metadata = {
