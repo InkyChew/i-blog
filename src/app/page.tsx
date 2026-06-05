@@ -49,7 +49,7 @@ export default async function HomePage() {
         </p>
         <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
           <Link
-            href="/posts"
+            href="/blog"
             className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-primary text-background font-bold hover:opacity-90 active:scale-98 transition-all text-center shadow-lg shadow-primary/20 cursor-pointer"
           >
             探索文章觀點
@@ -92,7 +92,7 @@ export default async function HomePage() {
             <p className="text-sm sm:text-base text-foreground/60">每週更新，帶給你最扎實的實戰硬核內容。</p>
           </div>
           <Link
-            href="/posts"
+            href="/blog"
             className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:gap-3 transition-all group"
           >
             瀏覽所有文章 <FontAwesomeIcon icon={faArrowRight} className="text-xs" />

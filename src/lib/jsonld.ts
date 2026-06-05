@@ -27,7 +27,7 @@ export function generatePostSchema(post: PostData): WithContext<BlogPosting> {
         '@type': 'BlogPosting',
         mainEntityOfPage: {
             "@type": "WebPage",
-            "@id": `${site.url}/posts/${post.slug}`
+            "@id": `${site.url}/blog/${post.slug}`
         },
         headline: post.title,
         description: post.description,

@@ -24,7 +24,7 @@ export default function PostCard({ post, titleAs: TitleTag = 'h2' }: PostCardPro
 
                 {/* 文章標題 */}
                 <TitleTag className="text-xl md:text-2xl font-bold tracking-tight mb-3 text-foreground group-hover:text-primary transition-colors duration-200">
-                    <Link href={`/posts/${post.slug}`}>
+                    <Link href={`/blog/${post.slug}`}>
                         {/* 鋪滿整張卡片的隱形連結，提升使用者的點擊體驗 */}
                         <span className="absolute inset-0 z-10 rounded-2xl" />
                         {post.title}

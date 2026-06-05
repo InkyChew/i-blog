@@ -1,12 +1,13 @@
 import { getAllPostSlugs, getPostData, generatePostSchema } from "@/src/lib/posts";
 import { notFound } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendarDays, faTag } from "@fortawesome/free-solid-svg-icons";
+import { faCalendarDays, faHashtag, faTag } from "@fortawesome/free-solid-svg-icons";
 import { faTwitter, faFacebook, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import { site } from "@/src/lib/constants";
 import TableOfContents from "@/src/components/TableOfContents";
 import JsonLd from "@/src/components/JsonLd";
 import { Metadata } from "next";
+import Link from "next/link";
 
 interface PageProps {
     params: Promise<{ slug: string }>;
@@ -59,7 +60,7 @@ export default async function BlogPostDetailPage({ params }: PageProps) {
                     <header className="mb-12 border-b border-foreground/10 pb-8">
                         <div className="flex items-center gap-4 text-xs md:text-sm font-medium text-foreground/50 mb-4">
                             <span className="flex items-center gap-1.5 text-secondary font-bold uppercase">
-                                <FontAwesomeIcon icon={faTag} /> {post.category}
+                                <FontAwesomeIcon icon={faTag} /> <Link key={post.category} href={`/blog/category/${post.category}`}>{post.category}</Link>
                             </span>
                             <span className="flex items-center gap-1.5">
                                 <FontAwesomeIcon icon={faCalendarDays} /> {new Date(post.createdAt).toLocaleDateString()}
@@ -77,6 +78,23 @@ export default async function BlogPostDetailPage({ params }: PageProps) {
                         className="prose dark:prose-invert prose-headings:scroll-mt-24 prose-headings:text-foreground prose-a:text-primary max-w-none text-base md:text-lg leading-relaxed text-foreground/90">
                         <Content />
                     </main>
+
+                    {post.tags && post.tags.length > 0 && (
+                        <div className="mt-12 pt-6 border-t border-foreground/5 flex flex-wrap items-center gap-2.5">
+                            <span className="text-xs font-bold uppercase tracking-wider text-foreground/40 mr-1.5 flex items-center gap-1">
+                                相關文章標籤
+                            </span>
+                            {post.tags.map((tag: string) => (
+                                <Link
+                                    key={tag}
+                                    href={`/blog/tag/${tag}`}
+                                    className="inline-flex items-center text-xs font-semibold text-secondary bg-secondary/5 border border-secondary/10 px-3 py-1 rounded-full hover:bg-secondary/10 hover:border-secondary/30 transition-all duration-200"
+                                >
+                                    #{tag}
+                                </Link>
+                            ))}
+                        </div>
+                    )}
 
                     <footer className="mt-16 pt-8 border-t border-foreground/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
                         <div className="text-sm font-bold text-foreground/70">覺得這篇文章有幫助嗎？分享給身邊的朋友吧！</div>

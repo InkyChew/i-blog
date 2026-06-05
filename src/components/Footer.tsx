@@ -8,7 +8,7 @@ export default function Footer() {
 
     const linksCompany = [
         { name: "關於", href: "/about" },
-        { name: "文章", href: "/posts" },
+        { name: "文章", href: "/blog" },
         { name: "聯絡", href: "/contact" },
     ];
 

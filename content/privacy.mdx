@@ -1,11 +1,13 @@
+import { site } from "../src/lib/constants";
+
 export const metadata = {
     title: '隱私政策',
     createdAt: '2026-05-21T15:34:00+08:00',
     category: 'AI',
-    description: "本隱私政策說明 BRAND.IO 如何收集、使用、保護您的個人資料與相關隱私權利。"
+    description: `本隱私政策說明 ${site.name} 如何收集、使用、保護您的個人資料與相關隱私權利。`
 }
 
-歡迎訪問 **BRAND.IO**（以下簡稱「我們」）。我們非常重視您的隱私權，並承諾保護您的個人資料。本隱私政策將說明我們如何收集、使用、揭露及保護您的資訊。
+歡迎訪問 **{site.name}**（以下簡稱「我們」）。我們非常重視您的隱私權，並承諾保護您的個人資料。本隱私政策將說明我們如何收集、使用、揭露及保護您的資訊。
 
 ## 1. 我們收集的資訊
 當您使用我們的網站、訂閱電子報或購買數位產品時，我們可能會收集以下資訊：
@@ -23,4 +25,4 @@ export const metadata = {
 
 ## 4. 聯絡我們
 如果您對本隱私政策有任何疑問，歡迎透過以下方式與我們聯繫：
-Email: [support@yourdomain.com](mailto:support@yourdomain.com)
+Email: <a href={`mailto:${site.email}`}>{site.email}</a>

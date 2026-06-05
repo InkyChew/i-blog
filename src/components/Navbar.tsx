@@ -13,7 +13,7 @@ export default function Navbar() {
     const navLinks = [
         { name: "首頁", href: "/" },
         { name: "關於", href: "/about" },
-        { name: "文章", href: "/posts" },
+        { name: "文章", href: "/blog" },
     ];
 
     return (

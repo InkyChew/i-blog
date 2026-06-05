@@ -4,15 +4,6 @@ import { WithContext, BlogPosting } from "schema-dts";
 
 const postsDirectory = path.join(process.cwd(), "content/posts");
 
-// export interface PostMetadata {
-//     title: string;
-//     description: string;
-//     createdAt: string;
-//     updatedAt?: string;
-//     category: string;
-//     tags?: string[];
-// }
-
 export interface PostData {
     slug: string;
     content: React.ComponentType;
@@ -100,4 +91,18 @@ export function getAllPostSlugs(): string[] {
     return fs.readdirSync(postsDirectory)
         .filter(name => name.endsWith(".mdx"))
         .map(name => name.replace(/\.mdx$/, ""));
+}
+
+export async function getPostsByCategory(category: string) {
+    const allPosts = await getSortedPostsData();
+    return allPosts.filter(
+        (post) => post.category.toLowerCase() === category.toLowerCase()
+    );
+}
+
+export async function getPostsByTag(tag: string) {
+    const allPosts = await getSortedPostsData();
+    return allPosts.filter((post) =>
+        post.tags.some((t: string) => t === tag)
+    );
 }
