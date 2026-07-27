@@ -1,6 +1,6 @@
 export const site = {
-    name: 'Inky',
-    description: '',
+    name: '勇氣實驗室',
+    description: '我是誰？我不知道。但我想透過紀錄來認識自己。',
     locale: 'zh-TW',
     author: 'Inky',
     url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://yourdomain.com'}`,

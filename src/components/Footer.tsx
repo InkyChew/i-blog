@@ -25,6 +25,7 @@ export default function Footer() {
     return (
         // bg-foreground/[0.02] 會在淺色模式生成極淺灰，深色模式生成極淺藍黑，完美融入全域背景
         <footer className="w-full bg-foreground/[0.02] border-t border-foreground/10 transition-colors duration-300">
+
             <div className="max-w-6xl mx-auto px-4 py-12 md:py-16">
 
                 {/* 上半部：品牌與連結網格 */}

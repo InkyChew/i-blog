@@ -1,7 +1,6 @@
 import { getAllPostSlugs, getPostData, generatePostSchema } from "@/src/lib/posts";
 import { notFound } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendarDays, faHashtag, faTag } from "@fortawesome/free-solid-svg-icons";
 import { faTwitter, faFacebook, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import { site } from "@/src/lib/constants";
 import TableOfContents from "@/src/components/TableOfContents";
@@ -58,12 +57,16 @@ export default async function BlogPostDetailPage({ params }: PageProps) {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
                 <div className="lg:col-span-8 max-w-3xl">
                     <header className="mb-12 border-b border-foreground/10 pb-8">
-                        <div className="flex items-center gap-4 text-xs md:text-sm font-medium text-foreground/50 mb-4">
-                            <span className="flex items-center gap-1.5 text-secondary font-bold uppercase">
-                                <FontAwesomeIcon icon={faTag} /> <Link key={post.category} href={`/blog/category/${post.category}`}>{post.category}</Link>
+                        <div className="flex items-center gap-2 text-xs md:text-sm font-medium text-foreground/50 mb-4">
+                            <span className="text-secondary">
+                                <Link key={post.category} href={`/blog/category/${post.category}`}
+                                    className="hover:opacity-90 transition-colors duration-200">
+                                    {post.category}
+                                </Link>
                             </span>
-                            <span className="flex items-center gap-1.5">
-                                <FontAwesomeIcon icon={faCalendarDays} /> {new Date(post.createdAt).toLocaleDateString()}
+                            <span className="text-foreground/20">•</span>
+                            <span>
+                                {new Date(post.createdAt).toLocaleDateString()}
                             </span>
                         </div>
                         <h1 className="text-3xl md:text-5xl font-black tracking-tight leading-tight mb-6">

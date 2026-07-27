@@ -27,24 +27,24 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             <section className="w-full bg-foreground/[0.02] border-b border-foreground/10 py-16 md:py-24 transition-colors duration-300">
                 <div className="max-w-6xl mx-auto px-4 flex flex-col items-center text-center">
 
-                    <div className={`w-20 h-20 rounded-3xl bg-primary/5 flex items-center justify-center mb-6`}>
+                    {/* <div className={`w-20 h-20 rounded-3xl bg-primary/5 flex items-center justify-center mb-6`}>
                         <FontAwesomeIcon icon={faTag} className="text-primary text-4xl" />
                     </div>
 
                     <span className='text-xs font-bold uppercase tracking-widest text-primary mb-3'>
                         Category
-                    </span>
+                    </span> */}
 
                     <h1 className="text-4xl md:text-6xl font-black tracking-tight mb-5 text-foreground">
                         {categoryName}
                     </h1>
 
                     <p className="text-base sm:text-lg md:text-xl text-foreground/70 max-w-2xl leading-relaxed">
-                        在這裡你可以找到所有關於「{categoryName}」的文章，從前端技術到獨立開發的實戰經驗，幫助你在這個領域持續成長。
+                        探索所有關於「{categoryName}」主題的文章。
                     </p>
 
                     <div className="mt-8 px-4 py-1.5 rounded-full bg-foreground/5 text-foreground/50 text-sm font-medium border border-foreground/10">
-                        目前共有 <span className='font-bold text-primary'>{posts.length}</span> 篇相關文章
+                        共有 <span className='font-bold text-primary'>{posts.length}</span> 篇相關文章
                     </div>
                 </div>
             </section>

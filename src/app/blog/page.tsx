@@ -3,7 +3,7 @@ import PostCard from "@/src/components/PostCard";
 
 export const metadata = {
     title: "文章觀點",
-    description: "探索關於網頁技術、獨立開發與數位品牌自動化经营的實戰心得與技術觀點。",
+    description: "探索關於網頁技術、獨立開發與數位品牌自動化经营的實戰心得與觀點。",
 };
 
 export default async function BlogListPage() {
@@ -14,7 +14,7 @@ export default async function BlogListPage() {
             {/* 頁面標題區塊 */}
             <div className="max-w-2xl mb-16">
                 <span className="text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 px-3 py-1 rounded-full">
-                    💡 知識庫
+                    知識庫
                 </span>
                 <h1 className="text-3xl md:text-5xl font-black mt-4 mb-4 tracking-tight">
                     文章與觀點
