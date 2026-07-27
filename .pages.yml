@@ -18,7 +18,7 @@ content:
       - { name: updatedAt, label: 更新日期, type: date }
       - { name: category, label: 分類, type: string, required: true }
       - { name: tags, label: 標籤, type: string, list: true }
-      - { name: body, label: 內容, type: code }
+      - { name: body, label: 內容, type: code, options: { format: markdown } }
 
   - name: privacy
     label: 隱私政策
