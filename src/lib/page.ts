@@ -10,15 +10,15 @@ export interface PageData {
 }
 
 export async function getPageData(slug: string): Promise<PageData> {
-    const { default: content, metadata } = await import(`@/content/${slug}.mdx`);
+    const { default: content, frontmatter } = await import(`@/content/${slug}.mdx`);
 
     return {
         slug,
         content,
-        title: metadata.title,
-        description: metadata.description,
-        createdAt: metadata.createdAt,
-        updatedAt: metadata.updatedAt ?? metadata.createdAt,
+        title: frontmatter.title,
+        description: frontmatter.description,
+        createdAt: frontmatter.createdAt,
+        updatedAt: frontmatter.updatedAt ?? frontmatter.createdAt,
     };
 }
 

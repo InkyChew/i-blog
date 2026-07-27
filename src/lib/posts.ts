@@ -28,19 +28,19 @@ export async function getSortedPostsData(): Promise<PostData[]> {
     const allPostsData = await Promise.all(
         fileNames.map(async (fileName) => {
             const slug = fileName.replace(/\.mdx$/, "");
-            const { default: content, metadata } = await import(
+            const { default: content, frontmatter } = await import(
                 `@/content/posts/${slug}.mdx`
             );
 
             return {
                 slug,
                 content,
-                title: metadata.title,
-                description: metadata.description,
-                createdAt: metadata.createdAt,
-                updatedAt: metadata.updatedAt ?? metadata.createdAt,
-                category: metadata.category,
-                tags: metadata.tags ?? []
+                title: frontmatter.title,
+                description: frontmatter.description,
+                createdAt: frontmatter.createdAt,
+                updatedAt: frontmatter.updatedAt ?? frontmatter.createdAt,
+                category: frontmatter.category,
+                tags: frontmatter.tags ?? []
             } satisfies PostData;
         })
     );
@@ -59,17 +59,17 @@ export async function getPostData(slug: string): Promise<PostData> {
     // const cached = postsCache?.find(p => p.slug === slug);
     // if (cached) return cached;
 
-    const { default: content, metadata } = await import(`@/content/posts/${slug}.mdx`);
+    const { default: content, frontmatter } = await import(`@/content/posts/${slug}.mdx`);
 
     return {
         slug,
         content,
-        title: metadata.title,
-        description: metadata.description,
-        createdAt: metadata.createdAt,
-        updatedAt: metadata.updatedAt ?? metadata.createdAt,
-        category: metadata.category,
-        tags: metadata.tags ?? []
+        title: frontmatter.title,
+        description: frontmatter.description,
+        createdAt: frontmatter.createdAt,
+        updatedAt: frontmatter.updatedAt ?? frontmatter.createdAt,
+        category: frontmatter.category,
+        tags: frontmatter.tags ?? []
     };
 }
 
