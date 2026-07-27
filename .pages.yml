@@ -7,12 +7,13 @@ content:
     label: 文章
     type: collection
     path: content/posts
-    filename: '{primary}.mdx'
+    filename: '{fields.slug}.mdx'
     format: yaml-frontmatter
     view:
       fields: [title, category, createdAt]
     fields:
       - { name: title, label: 標題, type: string, required: true }
+      - { name: slug, label: 網址（英文、連字號分隔，發佈後請勿更改）, type: string, required: true }
       - { name: description, label: 描述, type: text, required: true }
       - { name: createdAt, label: 建立日期, type: date, required: true }
       - { name: updatedAt, label: 更新日期, type: date }

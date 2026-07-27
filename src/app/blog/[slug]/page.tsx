@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
             tags: post.tags,
         },
         alternates: {
-            canonical: `${site.url}/post/${slug}`,
+            canonical: `${site.url}/blog/${slug}`,
         },
     };
 }
@@ -45,7 +45,7 @@ export default async function BlogPostDetailPage({ params }: PageProps) {
     if (!post) notFound();
 
     const Content = post.content;
-    const siteUrl = `${site.url}/posts/${slug}`;
+    const siteUrl = `${site.url}/blog/${slug}`;
     const shareLinks = [
         { icon: <FontAwesomeIcon icon={faTwitter} />, href: `https://twitter.com/intent/tweet?url=${encodeURIComponent(siteUrl)}&text=${encodeURIComponent(post.title)}`, label: "Twitter", hoverColor: "hover:text-[#1DA1F2]" },
         { icon: <FontAwesomeIcon icon={faFacebook} />, href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(siteUrl)}`, label: "Facebook", hoverColor: "hover:text-[#1877F2]" },
