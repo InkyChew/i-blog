@@ -7,6 +7,7 @@ content:
     label: 文章
     type: collection
     path: content/posts
+    filename: '{primary}.mdx'
     format: yaml-frontmatter
     view:
       fields: [title, category, createdAt]
@@ -17,7 +18,7 @@ content:
       - { name: updatedAt, label: 更新日期, type: date }
       - { name: category, label: 分類, type: string, required: true }
       - { name: tags, label: 標籤, type: string, list: true }
-      - { name: body, label: 內容, type: rich-text }
+      - { name: body, label: 內容, type: code }
 
   - name: privacy
     label: 隱私政策
@@ -40,3 +41,17 @@ content:
       - { name: description, label: 描述, type: text, required: true }
       - { name: createdAt, label: 建立日期, type: date, required: true }
       - { name: body, label: 內容, type: rich-text }
+
+  - name: site
+    label: 網站設定
+    type: file
+    path: data/site.json
+    format: json
+    fields:
+      - { name: name, label: 網站名稱, type: string, required: true }
+      - { name: description, label: 網站描述, type: text, required: true }
+      - { name: author, label: 作者, type: string, required: true }
+      - { name: email, label: 聯絡信箱, type: string, required: true }
+      - { name: youtube, label: YouTube 連結, type: string }
+      - { name: threads, label: Threads 連結, type: string }
+      - { name: instagram, label: Instagram 連結, type: string }
